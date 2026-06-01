@@ -8,7 +8,9 @@
 
             // Contact();
 
-            CountElementsAndSum();
+            // CountElementsAndSum();
+
+            GetTopNResults();
         }
 
         #region Task 1
@@ -272,6 +274,34 @@
                     Console.WriteLine($"{item.Number} appears {item.Count} times sum {item.sum}");
                 }
                 
+            }
+        }
+
+        #endregion
+
+        #region Task 4
+
+        static void GetTopNResults() {
+            Console.WriteLine("Enter top N: ");
+            var userInput = Console.ReadLine();
+
+            if (int.TryParse(userInput, out var number))
+            {
+                var numbers = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+                var topNResults = numbers
+                                        .OrderByDescending(x => x)
+                                        .Take(number)
+                                        .OrderBy(x => x);
+
+                foreach (var item in topNResults)
+                {
+                    Console.Write(item + " ");
+                }
+            } 
+            else
+            {
+
+                Console.WriteLine("Please enter a valid number.");
             }
         }
 

@@ -4,18 +4,19 @@
     {
         static void Main(string[] args)
         {
-            ProcessNumbers();
-
+            // ProcessNumbers();
+            Contact();
         }
 
+        #region Task 1
         static void ProcessNumbers() {
             Console.WriteLine("Enter array length:");
             var userInput = Console.ReadLine();
             if (int.TryParse(userInput, out var arrayLength)) { 
-                int[] mainArray = new int[arrayLength];
+                var mainArray = new int[arrayLength];
                 for (int i = 0; i < arrayLength; i++) {
                     Console.Write($"Enter element {i + 1}: ");
-                    if (int.TryParse(Console.ReadLine(), out int number))
+                    if (int.TryParse(Console.ReadLine(), out var number))
                     {
                         mainArray[i] = number;
                     }
@@ -51,6 +52,190 @@
             }
            
         }
-       
+        #endregion
+
+
+        #region Task 2
+        static void Contact()
+        {
+            Dictionary<int, string> user = new Dictionary<int, string>();
+            while (true) {
+                Console.WriteLine("----------------------------");
+                Console.WriteLine("1 - Add contact");
+                Console.WriteLine("2 - Delete contact");
+                Console.WriteLine("3 - Update contact");
+                Console.WriteLine("4 - Show all contacts");
+                Console.WriteLine("0 - Exit");
+
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write("Choose option: ");
+                Console.ResetColor();
+
+                var input = Console.ReadLine();
+
+                switch(input)
+                {
+                    case "1":
+                        Console.Write("Enter contact name: ");
+                        var userName = Console.ReadLine();
+                        if (string.IsNullOrWhiteSpace(userName) || userName.Any(char.IsDigit))
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Invalid name!");
+                            Console.ResetColor();
+                            break;
+                        }
+
+                        Console.Write("Enter contact number: ");
+                        var contactNumber = Console.ReadLine()?.Trim();
+                      
+                        if (contactNumber?.Length >= 9)
+                        {
+
+                            if (int.TryParse(contactNumber, out var number))
+                            {
+                                if (!user.ContainsKey(number))
+                                {
+                                    user.Add(number, userName);
+
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.WriteLine("Contact added successfully.");
+                                    Console.ResetColor();
+                                }
+                                else
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("This number already exists.");
+                                    Console.ResetColor();
+                                }
+                            }
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Only numbers are allowed.");
+                                Console.ResetColor();
+                            }
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Number must be at least 9 digits.");
+                            Console.ResetColor();
+                        }
+
+                        break;
+
+                    case "2":
+                        Console.Write("Enter contact number to delete: ");
+                        contactNumber = Console.ReadLine()?.Trim();
+                        if (int.TryParse(contactNumber, out var deleteNumber))
+                        {
+                            if (user.ContainsKey(deleteNumber))
+                            {
+                                user.Remove(deleteNumber);
+
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine("Contact deleted successfully.");
+                                Console.ResetColor();
+                            }
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Contact not found.");
+                                Console.ResetColor();
+                            }
+                        }
+                        else 
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Only numbers are allowed.");
+                            Console.ResetColor();
+                        }
+                        break;
+
+                    case "3":
+                        Console.Write("Enter contact number to update: ");
+                        var contactNumberToUpdate = Console.ReadLine()?.Trim();
+                        if (int.TryParse(contactNumberToUpdate, out var updateNumber))
+                        {
+                            if (user.ContainsKey(updateNumber))
+                            {
+                                Console.Write("Enter new contact name: ");
+                                var newUserName = Console.ReadLine();
+                                if (!string.IsNullOrWhiteSpace(newUserName) && !newUserName.Any(char.IsDigit))
+                                {
+                                    if(user.ContainsValue(newUserName))
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.Red;
+                                        Console.WriteLine("This name already exists.");
+                                        Console.ResetColor();
+                                        break;
+                                    }
+                                    else
+                                    {
+
+                                        user[updateNumber] = newUserName;
+
+                                        Console.ForegroundColor = ConsoleColor.Green;
+                                        Console.WriteLine("Contact updated successfully.");
+                                        Console.ResetColor();
+                                    }
+                                }
+                                else
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("Invalid name!");
+                                    Console.ResetColor();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Only numbers are allowed.");
+                            Console.ResetColor();
+                        }
+                        break;
+
+                    case "4":
+                        if (user.Count == 0 )
+                        {
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("No contacts found.");
+                            Console.ResetColor();
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+
+                            Console.WriteLine("--- CONTACT LIST ---");
+
+                            foreach (var item in user)
+                            {
+                                Console.WriteLine($"Number: {item.Key}, Name: {item.Value}");
+                            }
+
+                            Console.WriteLine("--------------------");
+
+                            Console.ResetColor();
+                        }
+                        break;
+
+                    case "0":
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Goodbye!");
+                        Console.ResetColor();
+                        return;
+                    default:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Invalid option. Please try again.");
+                        Console.ResetColor();
+                        break;
+                }
+
+            }
+        }
+        #endregion
+
     }
 }

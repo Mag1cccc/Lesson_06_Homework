@@ -5,7 +5,10 @@
         static void Main(string[] args)
         {
             // ProcessNumbers();
-            Contact();
+
+            // Contact();
+
+            CountElementsAndSum();
         }
 
         #region Task 1
@@ -235,6 +238,43 @@
 
             }
         }
+        #endregion
+
+
+        #region Task 3
+
+        static void CountElementsAndSum()
+        {
+            Console.WriteLine("Enter array length:");
+            var userInput = Console.ReadLine();
+
+            if (int.TryParse(userInput, out var arrayLength)) {
+                var mainArray = new int[arrayLength];
+                for (int i = 0; i < arrayLength; i++)
+                {
+                    Console.Write($"Enter element {i + 1}: ");
+                    if (int.TryParse(Console.ReadLine(), out var number))
+                    {
+                        mainArray[i] = number;
+                    }
+                }
+
+                var result = mainArray
+                            .GroupBy(x => x)
+                            .Select(g => new
+                            {
+                                Number = g.Key,
+                                Count = g.Count(),
+                                sum = g.Key * g.Count()
+                            });
+                foreach (var item in result)
+                {
+                    Console.WriteLine($"{item.Number} appears {item.Count} times sum {item.sum}");
+                }
+                
+            }
+        }
+
         #endregion
 
     }
